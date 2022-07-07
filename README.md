@@ -1,7 +1,4 @@
- #competitive-programming
- #coder: 
-                                 _      _  _         _        _____
-                                | \    / |(_) _ __  | |__    |_   _|_   _ 
-                                |  \  /  || || '_ \ | '_ \     | | | | | | 
-                                | | \/ | || || | | || | | |    | | | |_| | 
-                                |_|\__/|_||_||_| |_||_| |_|    |_|  \__,_| 
+#competitive-programming
+#programmer
+#coder
+No Bug
