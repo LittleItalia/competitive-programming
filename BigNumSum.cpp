@@ -41,26 +41,20 @@ const int MAXN = 2e5 + 777;
 
 using namespace std;
 
-string sum(string a, string b){
-    reverse(a.begin(), a.end());
-    reverse(b.begin(), b.end());
+string add(string a, string b) {
     while(a.size() < b.size())
-        a += '0';
+        a = '0' + a;
     while(b.size() < a.size())
-        b += '0';
-    int other = 0;
-    string ans = "";
-    for(int i = 0; i < a.size(); i++){
-        int cur = a[i] - '0' + b[i] - '0' + other;
-        if(cur >= 10)
-            other = 1;
-        else
-            other = 0;
-        ans += (char)('0' + cur % 10);
+        b = '0' + b;
+    int cur = 0;
+    string ans;
+    for (int i = a.size() - 1; i >= 0; i--) {
+        int d = (a[i] - '0') + (b[i] - '0') + cur;
+        cur = d / 10; 
+        ans = (char)(d % 10 + '0') + ans; 
     }
-    if(other)
-        ans += '1';
-    reverse(ans.begin(), ans.end());
+    if(cur)
+        ans = '1' + ans;   
     return ans;
 }
 
