@@ -1,5 +1,3 @@
-// đếm số thành phần liên thông mạnh
-
 #include <bits/stdc++.h>
 using namespace std;
 #pragma GCC optimize("O3,unroll-loops")
@@ -26,30 +24,33 @@ using vpll = vector<pll>;
 // x >> y :  x / (2 ^ y)
 const int MOD = 1e9 + 7;
 const ll INF = 1e18;
-const ll MAXN = 100000;
+const ll MAXN = 500005;
 
 ll n, m, num[MAXN], low[MAXN], cnt = 0, ans = 0;
 vl adj[MAXN];
+bool del[MAXN];
 stack<ll> st;
 
 void visit(int u) {
     low[u] = num[u] = cnt++;
     st.push(u);
-    for(int v : adj[u])
+    for(int v : adj[u]) {
+        if(del[v])
+            continue;
         if(num[v])
             low[u] = min(low[u], num[v]);
         else {
             visit(v);
             low[u] = min(low[u], low[v]);
         }
+    }
     if(num[u] == low[u]) {  
         ans++;
         ll v;
         while(v != u) {
             v = st.top();
             st.pop();
-            num[v] = 1e18;
-            low[v] = 1e18;  
+            del[v] = true;
         } 
     }
 }
