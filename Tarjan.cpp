@@ -24,48 +24,48 @@ using vpll = vector<pll>;
 // x >> y :  x / (2 ^ y)
 const int MOD = 1e9 + 7;
 const ll INF = 1e18;
-const ll MAXN = 500005;
+const int MAXN = 300005;
 
-ll n, m, num[MAXN], low[MAXN], cnt = 0, ans = 0;
+ll n, m, num[MAXN], low[MAXN], id = 1, scc = 0;
 vl adj[MAXN];
 bool del[MAXN];
 stack<ll> st;
 
-void visit(int u) {
-    low[u] = num[u] = cnt++;
+void dfs(int u){
+    del[u] = true;
+    num[u] = low[u] = id++;
     st.push(u);
-    for(int v : adj[u]) {
-        if(del[v])
-            continue;
-        if(num[v])
-            low[u] = min(low[u], num[v]);
-        else {
-            visit(v);
+    for(int v : adj[u]){
+        if(!num[v]){
+            dfs(v);
             low[u] = min(low[u], low[v]);
         }
+        if(del[v])
+            low[u] = min(low[u], low[v]);
     }
-    if(num[u] == low[u]) {  
-        ans++;
-        ll v;
-        while(v != u) {
-            v = st.top();
+    if(low[u] == num[u]){
+        while(st.size()){
+            int cur = st.top();
             st.pop();
-            del[v] = true;
-        } 
+            del[cur] = false;
+            if(cur == u)
+                break;
+        }
+        scc++;
     }
-}
+} 
 
 void solve() {
     cin >> n >> m;
-    for(int i = 0; i < m; i++) {
+    for(int i = 0; i < m; i++){
         ll u, v;
         cin >> u >> v;
         adj[u].pb(v);
     }
     for(int i = 1; i <= n; i++)
         if(!num[i])
-            visit(i);
-    cout << ans << '\n';
+            dfs(i);
+    cout << scc << '\n';
 }   
 
 int main(){
