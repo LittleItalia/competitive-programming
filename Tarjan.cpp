@@ -28,11 +28,11 @@ const int MAXN = 300005;
 
 ll n, m, num[MAXN], low[MAXN], id = 1, scc = 0;
 vl adj[MAXN];
-bool del[MAXN];
+bool onstack[MAXN];
 stack<ll> st;
 
 void dfs(int u){
-    del[u] = true;
+    onstack[u] = true;
     num[u] = low[u] = id++;
     st.push(u);
     for(int v : adj[u]){
@@ -40,14 +40,14 @@ void dfs(int u){
             dfs(v);
             low[u] = min(low[u], low[v]);
         }
-        if(del[v])
+        if(onstack[v])
             low[u] = min(low[u], low[v]);
     }
     if(low[u] == num[u]){
         while(st.size()){
             int cur = st.top();
             st.pop();
-            del[cur] = false;
+            onstack[cur] = false;
             if(cur == u)
                 break;
         }
