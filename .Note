@@ -3,3 +3,10 @@ BITWISE
 1 << i :  2 ^ i
 x << y :  x * (2 ^ y) 
 x >> Y :  x / (2 ^ y)
+
+
+bool minimize(int &x, int y) {
+	if (x > y) {
+		x = y; return true;
+	} else return false;
+}
