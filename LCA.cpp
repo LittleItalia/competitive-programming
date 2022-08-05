@@ -1,6 +1,8 @@
-
 #include <bits/stdc++.h>
+#pragma GCC optimize("O3,unroll-loops")
+#pragma GCC target("avx2,bmi,bmi2,popcnt,lzcnt")
 using namespace std;
+using db = double;
 using ll = long long;
 using pll = pair<ll, ll>;
 using vl = vector<ll>;
@@ -9,24 +11,31 @@ using vpll = vector<pll>;
 #define mp make_pair
 #define fi first
 #define se second
-#define MASK(i) (1LL << (i))
+#define MASK(i) (1ll << (i))
+#define BIT(x, i) (((x) >> (i)) & 1)
 #define pb push_back
 #define pf push_front
-#define MAX   100100
-#define LOG   17
+const int LOG = 17;
+const int MAXN = 300005;
+const int MOD = 1e9 + 7;
+const ll INF = 1e18;
+// x << y :  x * (2 ^ y) 
+// x >> y :  x / (2 ^ y)
 
-long long n, k;
-int numNode;
-vector<int> adj[MAX]; 
-int par[MAX][LOG + 1]; 
-int high[MAX]; 
+long long n, k, query;
+int numNode, mx = -1e9;
+vector<int> adj[MAXN]; 
+int par[MAXN][LOG + 1], dp[MAXN], tree[4 * MAXN], arr[MAXN]; 
+int high[MAXN]; 
 
 void dfs(int u) {
+    dp[u] = 1;
     for(int v : adj[u]) 
         if(v != par[u][0]) {
             par[v][0] = u; 
             high[v] = high[u] + 1;
             dfs(v);
+            dp[u] += dp[v];
         }
 }
 
@@ -39,6 +48,10 @@ void prepare() {
 }
 
 int lca(int u, int v) {
+    if(u == -1)
+        return v;
+    if(v == -1)
+        return u;
     if(high[v] > high[u]) 
         return lca(v, u);
     for(int j = LOG; j >= 0; j--) 
@@ -54,11 +67,24 @@ int lca(int u, int v) {
     return par[u][0];
 }
 
+ll dist(ll u, ll v) {
+    return high[u] + high[v] - 2 * high[lca(u, v)];
+}
+
+int getNearest(int x, int p){
+    for(int j = LOG; j >= 0; j--)
+        if(high[par[p][j]] > high[x])
+            p = par[p][j];
+    return p;
+}
+
+
+
 void solve() {
     cin >> n;
-    for(int i = 1; i < n; i++) {
-        ll u, v, w;
-        cin >> u >> v >> w;
+    for(int i = 2; i <= n; i++) {
+        ll u, v;
+        cin >> u >> v;
         adj[u].pb(v);
         adj[v].pb(u);
     }
