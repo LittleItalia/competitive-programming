@@ -67,10 +67,6 @@ int lca(int u, int v) {
     return par[u][0];
 }
 
-ll dist(ll u, ll v) {
-    return high[u] + high[v] - 2 * high[lca(u, v)];
-}
-
 int getNearest(int x, int p){
     for(int j = LOG; j >= 0; j--)
         if(high[par[p][j]] > high[x])
@@ -78,7 +74,17 @@ int getNearest(int x, int p){
     return p;
 }
 
+ll distance(ll u, ll v) {
+    return high[u] + high[v] - 2 * high[lca(u, v)];
+}
 
+// nhảy từ đỉnh u lên dist bước
+ll mid(ll u, ll dist) {
+    for(int i = LOG; i >= 0; i--) 
+        if(dist - (1ll << i) >= 0) 
+            u = par[u][i], dist -= 1ll << i;
+    return u;
+}
 
 void solve() {
     cin >> n;
