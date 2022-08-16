@@ -1,62 +1,174 @@
+// Minh Tú 
+
 #include <bits/stdc++.h>
 using namespace std;
-using db = double;
-using ldb = long double;
-using ll = long long;
-using pll = pair<ll, ll>;
-using vl = vector<ll>;
-using vpll = vector<pll>;
+#define ll  long long
+#define db  double
+#define pll  pair<ll, ll>
+#define vl  vector<ll>
+#define vb  vector<bool>
+#define vpll  vector<pll>
 #define IOS ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0)
 #define mp make_pair
 #define fi first
 #define se second
-#define MASK(i) (1ll << (i))
-#define BIT(x, i) (((x) >> (i)) & 1)
+#define MASK(i) (1LL << (i))
+#define sqr(i) i * i
 #define pb push_back
 #define pf push_front
-const int LOG = 17;
-const int MOD = 1e9 + 7;
+// x << y :  x * (2 ^ y) 
+// x >> y :  x / (2 ^ y)
+const db pi = acos(1);
+const int MOD = 1e9 + 19972207;
 const ll INF = 1e18;
+const int MAXN = 300005;
+const int EPS = 1e-9;
 
-struct TPoint{
-    ll x, y;
+struct point {
+    db x, y;
+    point() { x = y = 0.0; }
+    point(db _x, db _y) : x(_x), y(_y) {}
+    bool operator < (point other) const {
+        if(fabs(x - other.x) > EPS)
+            return x < other.x;
+        return y < other.y; }
+    bool operator == (point other) const {
+        return (fabs(x - other.x) < EPS && (fabs(y  - other.y) < EPS)); 
+    }
 };
 
-using TVector = TPoint;
-
-ll SqrLen(const TVector& u){
-    return u.x*u.x+u.y*u.y;
+db dist(point p1, point p2) {
+    return hypot(p1.x - p2.x, p1.y - p2.y);
 }
 
-TVector operator +(const TVector& u, const TVector& v){
-    return {u.x+v.x, u.y+v.y};
+db DEG_TO_RAD(db d) {
+    return d * pi / 180.0; 
+}
+db RAD_TO_DEG(db d) {
+    return d * 180.0 / pi;
 }
 
-TVector operator -(const TVector& u, const TVector& v){
-    return {u.x-v.x, u.y-v.y};
+point rotation(point p, db alpha) { // quay diem p 1 goc alpha ma goc la O
+    db rad = DEG_TO_RAD(alpha);
+    return point(p.x * cos(rad) - p.y * sin(rad), p.x * sin(rad) + p.y * cos(rad));
 }
 
-ll operator *(const TVector& u, const TVector& v){
-    return u.x*v.x+u.y*v.y;
+point rotations(point p1, point p2, db alpha) { // quay diem p2 quanh diem p1 1 goc alpha
+    db rad = DEG_TO_RAD(alpha);
+    point p3, p4;
+    p3.x = p1.x - p2.x;
+    p3.y = p1.y - p2.y;
+    p4 = point(p3.x * cos(rad) - p3.y * sin(rad), p3.x * sin(rad) + p3.y * cos(rad));
+    return point(p4.x + p2.x, p4.y + p2.y);
 }
 
-ll operator /(const TVector& u, const TVector& v){
-    return u.x*v.y-u.y*v.x;
+struct line {
+    db a, b, c;
+};
+
+line makeLine(point p1, point p2) { 
+    line l1;
+    if(p1.x == p2.x) {
+        l1.a = 1;
+        l1.b = 0;
+        l1.c = - p1.x;
+    } else {
+        l1.a = (p2.y - p1.y) / (p1.x - p2.x);
+        l1.b = 1;
+        l1.c = - (l1.a) * p1.x - p1.y;
+    }
+    return l1;
 }
 
-const int MAXN = 1e5+5;
+bool Parallel(line l1, line l2) { // Kiem tra song song
+    return (l1.a == l2.a) && (l1.b == l2.b);
+}
+
+bool Same(line l1, line l2) { // kiem tra trung
+    return Parallel(l1, l2) && (l1.c == l2.c);
+}
+
+bool Intersect(line l1, line l2, point &p) { // kiem tra l1 co cat l2 hay ko
+    if(Parallel(l1, l2)) return false;
+    p.x = (l1.c * l2.b - l2.c * l1.b) / (l1.a * l2.b - l2.a * l1.b);
+    p.y = (l1.a * l2.c - l2.a * l1.c) / (l1.a * l2.b - l2.a * l1.b);
+    return true;
+}
+
+struct vect {
+    db x, y;
+    vect(db _x, db _y) {
+        x = _x;
+        y = _y;
+    }
+};
+
+vect operator + (const point &B, const point &A) {
+    return vect(B.x + A.x, B.y + A.y);
+}
+
+vect operator - (const point &B, const point &A) { // vecAB = B - A
+    return vect(B.x - A.x, B.y - A.y);
+}
+
+vect getVect(point a, point b) { // lay vector
+    return vect(b.x - a.x, b.y - a.y);
+}
+
+vect scale(vect v, db k) { // nhan vector voi 1 so nguyen k != 0
+    return vect(v.x * k, v.y * k);
+}
+
+point translate(point p, vect v) { // tinh tien diem p theo vector v
+    return point(v.x + p.x, v.y + p.y);
+}
+
+db getLength(vect v) { // do dai vector v
+    return hypot(v.x, v.y);
+}
+
+db sqrLen(vect v) { // binh phuong do dai vector
+    return v.x * v.x + v.y * v.y;
+}
+
+db scalar(vect v1, vect v2) { // tich vo huong 2 vector v1 va v2
+    return (v1.x * v2.x + v1.y * v2.y);
+}
+
+db cross(vect v1, vect v2) { // tich co huong 2 vector v1 va v2
+    return (v1.x * v2.y - v1.y * v2.x);
+}
+
+db distToLine(point p, point a, point b) { // khoang cach ngan nhat tu p den duong thang ab
+    vect AP = getVect(a, p), AB = getVect(a, b);
+    db k = scalar(AP, AB) / sqrLen(AB);
+    point c = translate(a, scale(AB, k));
+    return dist(p, c);
+}
+
+db distToLineSegment(point p, point a, point b) { // khoang cach ngan nhat tu p den doan thang ab
+    vect AP = getVect(a, p), AB = getVect(a, b);
+    db k = scalar(AP, AB) / sqrLen(AB);
+    if(k < 0.0) 
+        return dist(p, a);
+    if(k > 1.0) 
+        return dist(p, b);
+    return distToLine(p, a, b);
+}
+
+map<pll, ll> res;
 ll n, m;
-TPoint p[MAXN], q[MAXN], A;
+point p[MAXN], q[MAXN], A;
 
-bool CCW(const TPoint& D, const TPoint& E, const TPoint& F){
-    return (E - D) / (F - E) > 0;
+bool CCW(const point& D, const point& E, const point& F){
+    return cross(E - D, F - E) > 0;
 }
 
 void GrahamScan(){
-    sort(p+1, p+n, [](const TPoint& B, const TPoint& C){
-        TVector u = B-A, v = C-A;
-        ll temp = u/v;
-        return temp > 0 || (temp == 0 && SqrLen(u) < SqrLen(v));
+    sort(p+1, p+n, [](const point& B, const point& C){
+        vect u = B - A, v = C - A;
+        ll temp = cross(u, v);
+        return temp > 0 || (temp == 0 && sqrLen(u) < sqrLen(v));
     });
 }
 
@@ -64,16 +176,17 @@ void BuildConvexHull(){
     m = 0;
     for(int i = 0; i < n; i++){
         while (m >= 2 && !CCW(q[m - 2], q[m - 1], p[i]))
-            --m;
+            m--;
         q[m++] = p[i];
     }
 }
 
-void solve(){
+void solve() {
     cin >> n;
     ll pos = 0;
     for(int i = 0; i < n; i++){
         cin >> p[i].x >> p[i].y;
+        res[{p[i].x, p[i].y}] = i + 1;
     }
     A = p[0];
     for(int i = 1; i < n; i++){
@@ -97,14 +210,15 @@ void solve(){
     for(int i = 1; i <= m; i++) 
         ans += (q[i - 1].x * q[i].y) - (q[i - 1].y * q[i].x);
     ans = abs(ans);
-    if(ans % 2 == 0)
-        cout << ans / 2 << ".0" << '\n';
-    else
-        cout << ans / 2 << ".5" << '\n';
+    vl cur;
+    for(int i = 0; i < m; i++) {
+        ll tmp = res[{q[i].x, q[i].y}];
+        cur.pb(tmp);
+    }
+    sort(cur.begin(), cur.end());
     for(int i = 0; i < m; i++)
-        cout << q[i].x << " " << q[i].y << '\n';
-}
-
+        cout << cur[i] << " ";
+}   
 
 int main(){
     IOS;
