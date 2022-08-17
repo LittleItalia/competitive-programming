@@ -165,7 +165,7 @@ bool CCW(const point& D, const point& E, const point& F){
 }
 
 void GrahamScan(){
-    sort(p+1, p+n, [](const point& B, const point& C){
+    sort(p + 1, p + n, [](const point& B, const point& C){
         vect u = B - A, v = C - A;
         ll temp = cross(u, v);
         return temp > 0 || (temp == 0 && sqrLen(u) < sqrLen(v));
@@ -175,10 +175,19 @@ void GrahamScan(){
 void BuildConvexHull(){
     m = 0;
     for(int i = 0; i < n; i++){
-        while (m >= 2 && !CCW(q[m - 2], q[m - 1], p[i]))
+        while(m >= 2 && !CCW(q[m - 2], q[m - 1], p[i]))
             m--;
         q[m++] = p[i];
     }
+}
+
+db triangle(point c, point a, point b) {
+    return ((db) 1 / 2 * distToLineSegment(c, a, b) * dist(a, b));
+}
+
+db quadrilateral(const point& A, const point& B, const point& C, const point& D){
+    return abs(((A.x * B.y+B.x * C.y+C.x * D.y+D.x * A.y) - 
+        (A.y * B.x+B.y * C.x+C.y * D.x+D.y * A.x))) / 2;
 }
 
 void solve() {
