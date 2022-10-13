@@ -3,14 +3,14 @@ using namespace std;
 
 const int MOD = 1e9+7;
 const int MAXN = 1e6;
-long long fact[MAXN+1];
+long long fact[MAXN + 1];
 
 long long binpow(long long a, long long b){
     long long ans = 1;
     while(b){
-        if(b&1)
-            ans = (ans*a)%MOD;
-        a = (a*a)%MOD;
+        if(b & 1)
+            ans = (ans * a) % MOD;
+        a = (a * a) % MOD;
         b >>= 1;
     }
     return ans;
@@ -19,13 +19,13 @@ long long binpow(long long a, long long b){
 void FactSetup(){
     fact[0] = 1;
     for(int i = 1; i <= MAXN; i++)
-        fact[i] = (fact[i-1]*i)%MOD;
+        fact[i] = (fact[i - 1] * i) % MOD;
 }
 
 long long C(int n, int k){
     if(k > n) 
         return 0;
-    return ((fact[n]*binpow(fact[k], MOD-2))%MOD*binpow(fact[n-k], MOD-2))%MOD;
+    return ((fact[n] * binpow(fact[k], MOD - 2)) % MOD * binpow(fact[n - k], MOD - 2)) % MOD;
 }
 
 int main(){
