@@ -5,106 +5,88 @@ using namespace std;
 #define ll  long long
 #define db  double
 #define pll  pair<ll, ll>
+#define str string
 #define pii pair<int, int>
 #define vpii vector<pii>
 #define vl  vector<ll>
 #define vpll  vector<pll>
 #define IOS ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0)
 #define mp make_pair
+#define sz(x) x.size()
 #define fi first
 #define pb push_back
 #define se second
 #define sqr(i) i * i
+#define __lcm(a, b)   (1ll * ((a) / __gcd((a), (b))) * (b))
 #define turn_on(i, m) (m |= (1LL << i))
 #define turn_off(i, m) (m &= ~(1LL << i))
-#define getbit(i, m) ((m >> i) & 1)
 #define MASK(i) (1ll << (i))
-#define BIT(x, i) (((x) >> (i)) & 1) // lấy ra bit thứ i của số x
+#define BIT(x, i) (((x) >> (i)) & 1) 
 // x << y :  x * (2 ^ y) 
 // x >> y :  x / (2 ^ y)
-// ((m >> i) & 1) : gia tri m co bit thu i bat
+// (((x) >> i) & 1) : lay ra bit thu i cua x
 // (m |= (1LL << i)) : bat bit thu i cua m len
 // (m &= ~(1LL << i)) : tat bit thu i cua m
-const int MAXN = 2000000;
+// __builtin_clz(n)) : dem so luong so 0 dung dau 
+// __builtin_ctz(n)) : dem so luong so 0 dung cuoi
+// __builtin_popcount(n) : dem so luong so 1 trong bit
+int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
+int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+const int MAXN = 2e5 + 1;
 const int LOG = 17;
 const ll MOD = 1e9 + 7;
-const ll INF = 3e18 + 7;
-const int N = 505;
-
-int n, x, q;
+const ll INF = 1e18;
 
 struct TrieNode {
-    TrieNode* bit[2];
+    TrieNode* child[26];
+    int cnt;
+    bool seen;
     TrieNode() {
-        bit[0] = bit[1] = NULL;
+        for(int i = 0; i < 26; i++) 
+            child[i] = NULL;
+        cnt = 0;
+        seen = false;
     }
-} 
+};
 
-*root = new TrieNode();
+TrieNode* root = new TrieNode();
 
-string make_binary(int x) {   
-    string ans = "";
-    for (int i = 0; i < 31; i++) 
-        ans = (char)(getbit(i, x) + 48) + ans;
-    return ans;
-}
-
-int make_int(string s) {
-    reverse(s.begin(), s.end());
-    int ans = 0;
-    for (int i = 0; i < s.size(); i++) 
-        ans += MASK(i) * (s[i] - 48);
-    return ans;
-}
-
-void insert(string s) {
-    TrieNode *p = root;
-    for(char v : s) {
-        int cur = v - 48;
-        if(p -> bit[cur] == NULL) 
-            p -> bit[cur] = new TrieNode();
-        p = p -> bit[cur];
+void TrieInsert(const string &s) {
+    int n = s.size();
+    TrieNode* p = root;
+    for(int i = 0; i < n; i++) {
+        int nxt = s[i] - 'a';
+        if(p->child[nxt] == NULL)
+            p->child[nxt] = new TrieNode();
+        p = p->child[nxt];
+        p->cnt++;
     }
 }
 
-string get(string s) {
-    TrieNode *p = root;
-    string ans = "";
-    for (char v : s) {
-        int cur = v - 48;
-        if (p -> bit[1 - cur] != NULL)  {
-            ans += (char) (1 - cur + 48);
-            p = p -> bit[1 - cur]; 
-        }
-        else { 
-            ans += (char) (cur + 48);
-            p = p -> bit[cur];
-        }
+bool TrieFind(const string &s) {
+    int n = s.size();
+    TrieNode* p = root;
+    for(int i = 0; i < n; i++) {
+        int nxt = s[i] - 'a';
+        if(p->child[nxt] == NULL)
+            return false;
+        p = p->child[nxt];
     }
-    return ans;
+    return p->cnt>0;
 }
 
-void solve() {
-    cin >> n;
-    while(n--) {
-        cin >> x;
-        insert(make_binary(x));
-    }
-    if(root -> bit[1] != NULL) 
-        cout << 1;
-    cin >> q;
-    while (q--) {
-        cin >> x;
-        cout << make_int(get(make_binary(x))) << " ";
-    }
+void solve(){
+    
 }
 
-int main(){
+int main(){ 
     IOS;
     #ifndef ONLINE_JUDGE
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
+    // #else
+    // freopen(".inp", "r", stdin);
+    // freopen(".out", "w", stdout);
     #endif
     solve();
 }
-
