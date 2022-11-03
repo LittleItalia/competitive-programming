@@ -39,128 +39,111 @@ const int LOG = 17;
 const ll MOD = 1e9 + 7;
 const ll INF = 1e18;
 
-class BST {
-    struct node {
-        int data;
-        node* left;
-        node* right;
-    };
-    node* root;
-    node* makeEmpty(node* t) {
-        if(t == NULL)
-            return NULL;
-        {
-            makeEmpty(t->left);
-            makeEmpty(t->right);
-            delete t;
-        }
-        return NULL;
-    }
-    node* insert(int x, node* t) {
-        if(t == NULL) {
-            t = new node;
-            t->data = x;
-            t->left = t->right = NULL;
-        }
-        else 
-        if(x < t->data)
-            t->left = insert(x, t->left);
-        else 
-        if(x > t->data)
-            t->right = insert(x, t->right);
-        return t;
-    }
-
-    node* findMin(node* t) {
-        if(t == NULL)
-            return NULL;
-        else 
-        if(t->left == NULL)
-            return t;
-        else
-            return findMin(t->left);
-    }
-    node* findMax(node* t) {
-        if(t == NULL)
-            return NULL;
-        else 
-        if(t->right == NULL)
-            return t;
-        else
-            return findMax(t->right);
-    }
-    node* remove(int x, node* t) {
-        node* temp;
-        if(t == NULL)
-            return NULL;
-        else 
-        if(x < t->data)
-            t->left = remove(x, t->left);
-        else 
-        if(x > t->data)
-            t->right = remove(x, t->right);
-        else 
-        if(t->left && t->right) {
-            temp = findMin(t->right);
-            t->data = temp->data;
-            t->right = remove(t->data, t->right);
-        }
-        else {
-            temp = t;
-            if(t->left == NULL)
-                t = t->right;
-            else 
-            if(t->right == NULL)
-                t = t->left;
-            delete temp;
-        }
-        return t;
-    }
-    void inorder(node* t) {
-        if(t == NULL)
-            return;
-        inorder(t->left);
-        cout << t->data << " ";
-        inorder(t->right);
-    }
-    node* find(node* t, int x) {
-        if(t == NULL)
-            return NULL;
-        else 
-        if(x < t->data)
-            return find(t->left, x);
-        else 
-        if(x > t->data)
-            return find(t->right, x);
-        else
-            return t;
-    }
-
-public:
-    BST() {
-        root = NULL;
-    }
-    ~BST() {
-        root = makeEmpty(root);
-    }
-    void insert(int x) {
-        root = insert(x, root);
-    }
-    void remove(int x) {
-        root = remove(x, root);
-    }
-    void display() {
-        inorder(root);
-        cout << endl;
-    }
-    void search(int x) {
-        root = find(root, x);
-    }
+struct Node {
+    int data; 
+    Node* left;
+    Node* right;
 };
 
+Node* root = new Node();
+
+Node* GetNewNode(int data) {
+    Node* newNode = new Node();
+    newNode->data = data;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+
+Node* Insert(Node* root, int data) {
+    if(root == NULL) 
+        root = GetNewNode(data);
+    else 
+    if(data <= root->data) 
+        root->left = Insert(root->left,data);
+    else 
+        root->right = Insert(root->right,data);
+    return root;
+}
+
+bool Search(Node* root, int data) {
+    if(root == NULL) 
+        return false;
+    else 
+    if(root->data == data) 
+        return true;
+    else 
+    if(data <= root->data) 
+        return Search(root->left,data);
+    else 
+        return Search(root->right,data);
+}
+
+Node* FindMin(Node* t) {
+    if(t == NULL)
+        return NULL;
+    else 
+    if(t->left == NULL)
+        return t;
+    else
+        return FindMin(t->left);
+}
+
+Node* FindMax(Node* t) {
+    if(t == NULL)
+        return NULL;
+    else 
+    if(t->right == NULL)
+        return t;
+    else
+        return FindMax(t->right);
+}
+
+Node* Remove(Node* t, int x) {
+    Node* temp;
+    if(t == NULL)
+        return NULL;
+    else 
+    if(x < t->data)
+        t->left = Remove(t->left, x);
+    else 
+    if(x > t->data)
+        t->right = Remove(t->right, x);
+    else 
+    if(t->left && t->right) {
+        temp = FindMin(t->right);
+        t->data = temp->data;
+        t->right = Remove(t->right, t->data);
+    }
+    else {
+        temp = t;
+        if(t->left == NULL)
+            t = t->right;
+        else 
+        if(t->right == NULL)
+            t = t->left;
+        delete temp;
+    }
+    return t;
+}
+
+void preorder(Node* t) {
+    if(t == NULL) 
+        return;
+    cout << t->data << " ";
+    preorder(t->left);
+    preorder(t->right);
+}
+
+void inorder(Node* t) {
+    if(t == NULL)
+        return;
+    inorder(t->left);
+    cout << t->data << " ";
+    inorder(t->right);
+}
+
 void solve() {
-    BST tree;
-  
+    
 }
 
 int main(){ 
