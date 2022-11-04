@@ -22,5 +22,5 @@ ll inv(ll a, ll b) {
 }
 
 int main() {
-    cout << ind(a, b);
+    cout << inv(a, b);
 }
