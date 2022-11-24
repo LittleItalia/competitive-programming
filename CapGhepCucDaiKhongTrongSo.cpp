@@ -1,33 +1,4 @@
-#include <bits/stdc++.h>
-#pragma GCC("Ofast")
-#pragma GCC optimize("O3,unroll-loops")
-#pragma GCC target("avx2,bmi,bmi2,popcnt,lzcnt")
-using namespace std;
-#define ll  long long
-#define db  double
-#define vl  vector<ll>
-#define pii pair<int, int>
-#define pll  pair<ll, ll>
-#define vpii vector<pii>
-#define vpll  vector<pll>
-#define IOS ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0)
-#define mp make_pair
-#define pb push_back
-#define fi first
-#define se second
-#define sqr(i) i * i
-#define __lcm(a, b)   (1ll * ((a) / __gcd((a), (b))) * (b))
-#define turn_on(i, m) (m |= (1LL << i))
-#define turn_off(i, m) (m &= ~(1LL << i))
-#define MASK(i) (1ll << (i))
-#define BIT(x, i) (((x) >> (i)) & 1) 
-int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
-int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
-const double eps = 1e-9;
-const int MAXN = 400000 + 77;
-const int LOG = 17;
-const ll MOD = 1e9 + 7;
-const ll INF = 1e18;
+// Cach 1
 
 ll n, m, x, y, times = 0;
 vpll edge, ans;
@@ -64,11 +35,52 @@ void solve() {
             cout << j << " " << i << '\n';
 }
 
-int main(){ 
-    IOS;
-    #ifndef ONLINE_JUDGE
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
-    #endif
-    solve();
+
+// Cach 2
+
+int n, m, u, v;
+int matchX[MAXN], matchY[MAXN], trace[MAXN];
+vector<int> a[MAXN], b[MAXN];
+vpii ans;
+
+int findPath() {
+    queue<int> st;
+    for(int i = 1; i <= m; i++) trace[i] = 0;
+    for(int i = 1; i <= n; i++) 
+        if(matchX[i] == 0)  st.push(i);
+    while(!st.empty()) {
+        int u = st.front();
+        st.pop();
+        for(int v : a[u]) {
+            if(trace[v]) continue;
+            trace[v] = u;
+            if(matchY[v] == 0) return v;
+            st.push(matchY[v]);
+        }
+    }
+    return -1;
 }
+
+void solve() {
+    cin >> n >> m;
+    int u, v;
+    while(cin >> u >> v) 
+        a[u].pb(v), b[v].pb(u);
+    while(true) {
+        v = findPath();
+        if(v == -1) break;
+        while(v != 0) {
+            u = trace[v];
+            int k = matchX[u];
+            matchX[u] = v;
+            matchY[v] = u;
+            v = k;
+        }
+    }
+    for(int i = 1; i <= n; i++) 
+        if(matchX[i]) ans.pb({i, matchX[i]});
+    cout << ans.size() << '\n';
+    for(int i = 0; i < ans.size(); i++) 
+        cout << ans[i].fi << " " << ans[i].se << '\n';
+}
+
