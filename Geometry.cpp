@@ -181,8 +181,15 @@ void FindIntersect(point A, point B, point C, point D, point &cur) {   // Tim to
     }
 }
 
-bool CCW(const point& D, const point& E, const point& F){
-    return cross(E - D, F - E) > 0;
+int CCW(point A, point B, point C) {
+    vect AB = getVect(A, B);
+    vect AC = getVect(A, C);
+    if(cross(AB, AC) > 0) 
+        return 1;  // diem C nam phia tren doan thang AB
+    else
+    if(cross(AB, AC) < 0) 
+        return -1; // diem C nam phia duoi doan thang AB
+    return 0; 
 }
 
 void GrahamScan(){
