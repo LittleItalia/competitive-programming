@@ -1,5 +1,3 @@
-// Minh Tú 
-
 #include <bits/stdc++.h>
 using namespace std;
 #define ll  long long
@@ -16,8 +14,6 @@ using namespace std;
 #define sqr(i) i * i
 #define pb push_back
 #define pf push_front
-// x << y :  x * (2 ^ y) 
-// x >> y :  x / (2 ^ y)
 const db pi = acos(1);
 const int MOD = 1e9 + 19972207;
 const ll INF = 1e18;
@@ -48,12 +44,12 @@ db RAD_TO_DEG(db d) {
     return d * 180.0 / pi;
 }
 
-point rotation(point p, db alpha) { // quay diem p 1 goc alpha ma goc la O
+point rotation(point p, db alpha) {
     db rad = DEG_TO_RAD(alpha);
     return point(p.x * cos(rad) - p.y * sin(rad), p.x * sin(rad) + p.y * cos(rad));
 }
 
-point rotations(point p1, point p2, db alpha) { // quay diem p2 quanh diem p1 1 goc alpha
+point rotations(point p1, point p2, db alpha) {
     db rad = DEG_TO_RAD(alpha);
     point p3, p4;
     p3.x = p1.x - p2.x;
@@ -66,7 +62,7 @@ struct line {
     db a, b, c;
 };
 
-line makeLine(point p1, point p2) { 
+line makeLine(point p1, point p2) {
     line l1;
     if(p1.x == p2.x) {
         l1.a = 1;
@@ -103,15 +99,7 @@ struct vect {
     }
 };
 
-vect operator + (const point &B, const point &A) {
-    return vect(B.x + A.x, B.y + A.y);
-}
-
-vect operator - (const point &B, const point &A) { // vecAB = B - A
-    return vect(B.x - A.x, B.y - A.y);
-}
-
-vect getVect(point a, point b) { // lay vector
+vect getVect(point a, point b) {
     return vect(b.x - a.x, b.y - a.y);
 }
 
@@ -127,7 +115,7 @@ db getLength(vect v) { // do dai vector v
     return hypot(v.x, v.y);
 }
 
-db sqrLen(vect v) { // binh phuong do dai vector
+db getLength_sq(vect v) {
     return v.x * v.x + v.y * v.y;
 }
 
@@ -135,30 +123,59 @@ db scalar(vect v1, vect v2) { // tich vo huong 2 vector v1 va v2
     return (v1.x * v2.x + v1.y * v2.y);
 }
 
-db cross(vect v1, vect v2) { // tich co huong 2 vector v1 va v2
-    return (v1.x * v2.y - v1.y * v2.x);
-}
-
-db distToLine(point p, point a, point b) { // khoang cach ngan nhat tu p den duong thang ab
+db distToLine(point p, point a, point b) {
     vect AP = getVect(a, p), AB = getVect(a, b);
-    db k = scalar(AP, AB) / sqrLen(AB);
+    db k = scalar(AP, AB) / getLength_sq(AB);
     point c = translate(a, scale(AB, k));
     return dist(p, c);
 }
 
-db distToLineSegment(point p, point a, point b) { // khoang cach ngan nhat tu p den doan thang ab
+db distToLineSegment(point p, point a, point b, point &cur, bool &ok) {
     vect AP = getVect(a, p), AB = getVect(a, b);
-    db k = scalar(AP, AB) / sqrLen(AB);
-    if(k < 0.0) 
+    db k = scalar(AP, AB) / getLength_sq(AB);
+    if(k < 0.0) {
+        ok = true;
+        cur = a;
         return dist(p, a);
-    if(k > 1.0) 
+    }
+    if(k > 1.0) {
+        ok = true;
+        cur = b;
         return dist(p, b);
+    }
     return distToLine(p, a, b);
 }
 
-map<pll, ll> res;
-ll n, m;
-point p[MAXN], q[MAXN], A;
+void FindFootOfTheAltitude(point A, point B, point C, point &cur) { // Tim toa do chan duong cao
+    line l = makeLine(B, C);
+    double ans = -(l.a * A.x + l.b * A.y + l.c) / (l.a * l.a + l.b * l.b);
+    cur.x = ans * l.a + A.x;
+    cur.y = ans * l.b + A.y;
+}
+
+db slope(point A, point B) { // Tim he co so
+    if(B.x - A.x != 0)
+        return (B.y - A.y) / (B.x - A.x);
+    return 1e8;
+}
+
+void FindIntersect(point A, point B, point C, point D, point &cur) {   // Tim toa do giao diem cua 2 doan thang
+    long double a1 = B.y - A.y;
+    long double b1 = A.x - B.x;
+    long double c1 = a1 * (A.x) + b1 * (A.y);
+    long double a2 = D.y - C.y;
+    long double b2 = C.x - D.x;
+    long double c2 = a2 * (C.x) + b2 * (C.y);
+    long double determinant = a1*b2 - a2*b1;
+    if(determinant == 0) {
+        cur.x = FLT_MAX;
+        cur.y = FLT_MAX;
+    }
+    else {
+        cur.x = 1.0*(b2*c1 - b1*c2)/determinant;
+        cur.y = 1.0*(a1*c2 - a2*c1)/determinant;
+    }
+}
 
 bool CCW(const point& D, const point& E, const point& F){
     return cross(E - D, F - E) > 0;
@@ -188,17 +205,4 @@ db triangle(point c, point a, point b) {
 db quadrilateral(const point& A, const point& B, const point& C, const point& D){
     return abs(((A.x * B.y+B.x * C.y+C.x * D.y+D.x * A.y) - 
         (A.y * B.x+B.y * C.x+C.y * D.x+D.y * A.x))) / 2;
-}
-
-void solve() {
-    
-}   
-
-int main(){
-    IOS;
-    #ifndef ONLINE_JUDGE
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
-    #endif
-    solve();
 }
