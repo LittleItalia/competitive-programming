@@ -123,6 +123,10 @@ db scalar(vect v1, vect v2) { // tich vo huong 2 vector v1 va v2
     return (v1.x * v2.x + v1.y * v2.y);
 }
 
+db cross(vect v1, vect v2) { // tich co huong 2 vector v1 va v2
+    return (v1.x * v2.y - v1.y * v2.x);
+}
+
 db distToLine(point p, point a, point b) {
     vect AP = getVect(a, p), AB = getVect(a, b);
     db k = scalar(AP, AB) / getLength_sq(AB);
