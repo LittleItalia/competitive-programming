@@ -1,19 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-#define ll  long long
-#define db  double
-#define pll  pair<ll, ll>
-#define vl  vector<ll>
-#define vb  vector<bool>
-#define vpll  vector<pll>
-#define IOS ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0)
-#define mp make_pair
-#define fi first
-#define se second
-#define MASK(i) (1LL << (i))
-#define sqr(i) i * i
-#define pb push_back
-#define pf push_front
 const db pi = acos(1);
 const int MOD = 1e9 + 19972207;
 const ll INF = 1e18;
@@ -99,7 +83,15 @@ struct vect {
     }
 };
 
-vect getVect(point a, point b) {
+vect operator + (const point &B, const point &A) {
+    return vect(B.x + A.x, B.y + A.y);
+}
+
+vect operator - (const point &B, const point &A) { // vecAB = B - A
+    return vect(B.x - A.x, B.y - A.y);
+}
+
+vect getVect(point a, point b) { // lay vector
     return vect(b.x - a.x, b.y - a.y);
 }
 
@@ -115,7 +107,7 @@ db getLength(vect v) { // do dai vector v
     return hypot(v.x, v.y);
 }
 
-db getLength_sq(vect v) {
+db sqrLen(vect v) { // binh phuong do dai vector
     return v.x * v.x + v.y * v.y;
 }
 
@@ -127,6 +119,10 @@ db cross(vect v1, vect v2) { // tich co huong 2 vector v1 va v2
     return (v1.x * v2.y - v1.y * v2.x);
 }
 
+db getLength_sq(vect v) {
+    return v.x * v.x + v.y * v.y;
+}
+
 db distToLine(point p, point a, point b) {
     vect AP = getVect(a, p), AB = getVect(a, b);
     db k = scalar(AP, AB) / getLength_sq(AB);
@@ -134,17 +130,13 @@ db distToLine(point p, point a, point b) {
     return dist(p, c);
 }
 
-db distToLineSegment(point p, point a, point b, point &cur, bool &ok) {
+db distToLineSegment(point p, point a, point b) {
     vect AP = getVect(a, p), AB = getVect(a, b);
     db k = scalar(AP, AB) / getLength_sq(AB);
     if(k < 0.0) {
-        ok = true;
-        cur = a;
         return dist(p, a);
     }
     if(k > 1.0) {
-        ok = true;
-        cur = b;
         return dist(p, b);
     }
     return distToLine(p, a, b);
@@ -192,9 +184,12 @@ int CCW(point A, point B, point C) {
     return 0; 
 }
 
+int n, m;
+point q[MAXN], p[MAXN], A;
+
 void GrahamScan(){
     sort(p + 1, p + n, [](const point& B, const point& C){
-        vect u = B - A, v = C - A;
+        vect u = getVect(A, B), v = getVect(A, C);
         ll temp = cross(u, v);
         return temp > 0 || (temp == 0 && sqrLen(u) < sqrLen(v));
     });
