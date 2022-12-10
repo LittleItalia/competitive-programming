@@ -184,12 +184,17 @@ int CCW(point A, point B, point C) {
     return 0; 
 }
 
+map<pll, ll> res;
 int n, m;
 point q[MAXN], p[MAXN], A;
 
+bool CCWInConvexHull(const point& D, const point& E, const point& F){
+    return cross(E - D, F - E) > 0;
+}
+
 void GrahamScan(){
-    sort(p + 1, p + n, [](const point& B, const point& C){
-        vect u = getVect(A, B), v = getVect(A, C);
+    sort(p+1, p+n, [](const point& B, const point& C){
+        vect u = B - A, v = C - A;
         ll temp = cross(u, v);
         return temp > 0 || (temp == 0 && sqrLen(u) < sqrLen(v));
     });
@@ -198,13 +203,13 @@ void GrahamScan(){
 void BuildConvexHull(){
     m = 0;
     for(int i = 0; i < n; i++){
-        while(m >= 2 && !CCW(q[m - 2], q[m - 1], p[i]))
+        while (m >= 2 && !CCWInConvexHull(q[m - 2], q[m - 1], p[i]))
             m--;
         q[m++] = p[i];
     }
 }
 
-db triangle(point c, point a, point b) {
+db AreaOfTriangle(point c, point a, point b) {
     return ((db) 1 / 2 * distToLineSegment(c, a, b) * dist(a, b));
 }
 
