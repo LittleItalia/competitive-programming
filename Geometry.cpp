@@ -213,6 +213,10 @@ db AreaOfTriangle(point c, point a, point b) {
     return ((db) 1 / 2 * distToLineSegment(c, a, b) * dist(a, b));
 }
 
+long double Area(point A, point B, point C) {  // Tinh dien tich da giac voi toa do nguyen 
+    return (long double) 0.5 * abs((B.x - A.x) * (C.y - A.y) - (C.x - A.x) * (B.y - A.y)); 
+}
+
 db quadrilateral(const point& A, const point& B, const point& C, const point& D){
     return abs(((A.x * B.y+B.x * C.y+C.x * D.y+D.x * A.y) - 
         (A.y * B.x+B.y * C.x+C.y * D.x+D.y * A.x))) / 2;
