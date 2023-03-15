@@ -27,28 +27,6 @@ pll getHash(int pos, int l, int r) {
         , (hashVal[pos][r].se - hashVal[pos][l - 1].se * pw2[r - l + 1] + mod[1] * mod[1]) % mod[1]);
 }
 
-bool check(ll len) {
-    map<pll, ll> res;
-    for(int i = 0; i < n; i++) {
-        map<pll, ll> cnt;
-        for(int j = 1; j < (int)arr[i].size() - len + 1; j++) 
-            cnt[getHash(i, j, j + len - 1)]++;
-        for(auto x : cnt) res[x.fi]++;
-    }
-    for(auto x : res) 
-        if(x.se >= k) {
-            for(int i = 0; i < n; i++) 
-                for(int j = 1; j < (int)arr[i].size() - len + 1; j++) {
-                    pll tmp = getHash(i, j, j + len - 1);
-                    if(tmp.fi == x.fi.fi && tmp.se == x.fi.se) {
-                        ans = arr[i].substr(j, len);;
-                        return true;
-                    }   
-                }
-        }
-    return false;
-}
-
 void solve() {
     memset(hashVal, 0, sizeof(hashVal));
     cin >> n >> k;
