@@ -1,27 +1,3 @@
-#include <bits/stdc++.h>
-#pragma GCC optimize("O3,unroll-loops")
-#pragma GCC target("avx2,bmi,bmi2,popcnt,lzcnt")
-using namespace std;
-using db = double;
-using ll = long long;
-using pll = pair<ll, ll>;
-using vl = vector<ll>;
-using vpll = vector<pll>;
-#define IOS ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0)
-#define mp make_pair
-#define fi first
-#define se second
-#define MASK(i) (1ll << (i))
-#define BIT(x, i) (((x) >> (i)) & 1)
-#define pb push_back
-#define pf push_front
-const int LOG = 17;
-const int MAXN = 300005;
-const int MOD = 1e9 + 7;
-const ll INF = 1e18;
-// x << y :  x * (2 ^ y) 
-// x >> y :  x / (2 ^ y)
-
 long long n, k, query;
 int numNode, mx = -1e9;
 vector<int> adj[MAXN]; 
@@ -86,24 +62,4 @@ ll mid(ll u, ll dist) {
     return u;
 }
 
-void solve() {
-    cin >> n;
-    for(int i = 2; i <= n; i++) {
-        ll u, v;
-        cin >> u >> v;
-        adj[u].pb(v);
-        adj[v].pb(u);
-    }
-    prepare();
-    
-} 
-
-int main(){
-    IOS;
-    #ifndef ONLINE_JUDGE
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
-    #endif
-    solve();
-}
 
