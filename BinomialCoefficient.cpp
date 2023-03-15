@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 const int MOD = 1e9+7;
 const int MAXN = 1e6;
 long long fact[MAXN + 1];
@@ -26,8 +23,4 @@ long long C(int n, int k){
     if(k > n) 
         return 0;
     return ((fact[n] * binpow(fact[k], MOD - 2)) % MOD * binpow(fact[n - k], MOD - 2)) % MOD;
-}
-
-int main(){
-
 }
