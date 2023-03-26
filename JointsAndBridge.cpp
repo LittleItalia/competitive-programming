@@ -12,16 +12,13 @@ void dfs(int u, int par) {
         if(!num[v]) {
             dfs(v, u);
             low[u] = min(low[u], low[v]);
-            if(low[v] == num[v]) 
-                bridge++;
+            if(low[v] == num[v]) bridge++;
             child++;
             if(u == par) {
-                if(child > 1) 
-                    joint[u] = true;
+                if(child > 1) joint[u] = true;
             }
             else 
-                if(low[v] >= num[u]) 
-                    joint[u] = true;
+                if(low[v] >= num[u]) joint[u] = true;
         }
         else 
             low[u] = min(low[u], num[v]);
