@@ -1,26 +1,3 @@
-// Minh Tú 
-
-#include <bits/stdc++.h>
-using namespace std;
-#define ll  long long
-#define db  double
-#define pll  pair<ll, ll>
-#define vl  vector<ll>
-#define vpll  vector<pll>
-#define IOS ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0)
-#define mp make_pair
-#define fi first
-#define pb push_back
-#define se second
-#define sqr(i) i * i
-#define MASK(i) (1ll << (i))
-#define BIT(x, i) (((x) >> (i)) & 1) // lấy ra bit thứ i của số x
-// x << y :  x * (2 ^ y) 
-// x >> y :  x / (2 ^ y)
-const int MAXN = 70000;
-const int LOG = 17;
-const ll MOD = 998244353;
-
 int n, k, query, m, d, subtask;
 vector<int> adj[MAXN]; 
 int dp2[MAXN], dp1[MAXN];
@@ -67,16 +44,4 @@ void solve() {
         ans = max({ans, dp1[i], dp2[i]});
     cout << ans << '\n';
 } 
-
-int main(){
-    IOS;
-    #ifndef ONLINE_JUDGE
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
-    #else
-    freopen("diameter.inp", "r", stdin);
-    freopen("diameter.out", "w", stdout);
-    #endif
-    solve();
-}
 
