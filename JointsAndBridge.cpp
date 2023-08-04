@@ -1,7 +1,7 @@
 ll n, m, bridge = 0, timeDFS = 0;
-ll low[MAXN], num[MAXN];
-bool joint[MAXN];
-vl adj[MAXN];
+ll low[maxn], num[maxn];
+bool joint[maxn];
+vl adj[maxn];
 
 void dfs(int u, int par) {
     int child = 0;
