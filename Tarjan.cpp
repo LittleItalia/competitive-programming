@@ -1,6 +1,6 @@
-ll n, m, num[MAXN], low[MAXN], id = 1, scc = 0;
+ll n, m, num[maxn], low[maxn], id = 1, scc = 0;
 vl adj[MAXN];
-bool onstack[MAXN];
+bool onstack[maxn];
 stack<ll> st;
 
 void dfs(int u){
@@ -27,16 +27,4 @@ void dfs(int u){
     }
 } 
 
-void solve() {
-    cin >> n >> m;
-    for(int i = 0; i < m; i++){
-        ll u, v;
-        cin >> u >> v;
-        adj[u].pb(v);
-    }
-    for(int i = 1; i <= n; i++)
-        if(!num[i])
-            dfs(i);
-    cout << scc << '\n';
-}   
 
