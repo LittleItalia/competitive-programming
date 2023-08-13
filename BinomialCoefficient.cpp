@@ -1,26 +1,23 @@
-const int MOD = 1e9+7;
-const int MAXN = 1e6;
-long long fact[MAXN + 1];
-
-long long binpow(long long a, long long b){
-    long long ans = 1;
-    while(b){
-        if(b & 1)
+ll binpow(ll a, ll b) {
+    ll ans = 1;
+    while(b) {
+        if(b & 1) 
             ans = (ans * a) % MOD;
-        a = (a * a) % MOD;
+        a = (a * a) % MOD;  
         b >>= 1;
     }
     return ans;
 }
 
-void FactSetup(){
-    fact[0] = 1;
-    for(int i = 1; i <= MAXN; i++)
-        fact[i] = (fact[i - 1] * i) % MOD;
+ll C(ll n, ll k) {
+    return fact[n] * finv[n - k] % MOD * finv[k] % MOD;
 }
 
-long long C(int n, int k){
-    if(k > n) 
-        return 0;
-    return ((fact[n] * binpow(fact[k], MOD - 2)) % MOD * binpow(fact[n - k], MOD - 2)) % MOD;
+void precalc() {
+    fact[0] = 1;
+    for(int i = 1; i <= maxn; i++) 
+        fact[i] = 1ll * fact[i - 1] * i % MOD;    
+    finv[maxn] = binpow(fact[maxn], MOD - 2);
+    for(int i = maxn - 1; i >= 0; i--) 
+        finv[i] = 1ll * finv[i + 1] * (i + 1) % MOD;
 }
