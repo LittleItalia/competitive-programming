@@ -1,18 +1,15 @@
-void comb(int i, int n, int m, int cur[], int curLen) {
-    if(curLen == m) {
-        for(int j = 0; j < m; j++)
-            cout << cur[j] << " ";
+void recur(int pos, int n, int k, int len) {
+    if(len == k) {
+        for(int i = 1; i <= k; i++)
+            cout << cur[i] << ' ';
         cout << '\n';
         return;
     }
-    if(i == n)  
-        return;
-    cur[curLen] = i + 1;
-    comb(i + 1, n, m, cur, curLen + 1);
-    comb(i + 1, n, m, cur, curLen);
-}
 
-void solve() {
-    int cur[10];
-    comb(0, 5, 2, cur, 0);
+    if(pos == n) return;
+
+    cur[len + 1] = pos + 1;
+
+    recur(pos + 1, n, k, len + 1);
+    recur(pos + 1, n, k, len);
 }
