@@ -3,6 +3,10 @@ int coef[maxn + 1], divs[maxn + 1];
 bool comp[maxn + 1];
 vector<int> prime;
 
+// coef[i] là số mũ của thừa số nguyên tố nhỏ nhất của i
+// divs[i] là số lượng ước của i
+// comp[i] là check i có phải là số nguyên tố hay không
+
 void sieve() {
     memset(comp, false, sizeof(comp));
 
