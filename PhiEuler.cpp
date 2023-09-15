@@ -1,8 +1,3 @@
-#include <bits/stdc++.h>
-using namespace;
-
-using ll = long long;
-
 ll phi(ll n) {  
     ll res = 0;
     for(int i = 2; i <= sqrt(n); i++) {
@@ -15,8 +10,4 @@ ll phi(ll n) {
     if(n > 1) 
         res -= res / n;
     return res;
-}
-
-int main() {
-
 }
