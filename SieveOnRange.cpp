@@ -1,8 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
-using ll = long long;
-
 void sieve(ll l, ll r) {
     vector<bool> prime(r - l + 1, true);
     for(ll i = 2; i <= sqrt(r); i++) 
@@ -13,6 +8,3 @@ void sieve(ll l, ll r) {
             cout << i << " ";
 }
 
-int main() {
-  
-}
